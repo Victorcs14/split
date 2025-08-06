@@ -1,0 +1,113 @@
+body {
+  background-color: #1a1919;
+  color: rgb(255, 255, 255);
+  font-family: sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+h1 {
+  color: #00ff00;
+  font-size: 72px; /* aumentei de 48px para 72px */
+  margin-bottom: 30px;
+}
+
+.input-container {
+  background-color: #00cc33;
+  border-radius: 30px;
+  padding: 20px 25px; /* aumentei padding para maior área */
+  margin: 30px auto;
+  display: inline-block;
+}
+
+.input-container label {
+  font-weight: bold;
+  margin-right: 15px;
+  font-size: 20px; /* aumentei o tamanho da label */
+}
+
+.input-container input {
+  font-size: 22px; /* maior para facilitar leitura */
+  padding: 10px 15px; /* maior padding para facilitar clique */
+  border-radius: 12px;
+  border: none;
+  background-color: #2b2828;
+  color: #ffffff;
+  width: 180px;
+}
+
+.pessoas {
+  list-style: none;
+  padding: 0;
+  margin: 30px auto;
+  max-width: 350px;
+}
+
+.pessoas li {
+  margin: 15px 0;
+}
+
+.pessoas input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  font-size: 18px;
+  border: none;
+  background-color: #2b2828;
+  color: #ffffff;
+}
+
+.resultado {
+  margin-top: 30px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #00ff00;
+}
+
+.caixa-pessoa {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* Botões alinhados lado a lado */
+.botoes-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+/* Todos os botões do grupo com mesmo tamanho, formato redondo e alinhamento */
+.botao,
+.botao-refresh,
+.adicionar-pessoa-btn,
+.calcular-btn {
+  background-color: #00cc33;
+  color: #fff;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  border-radius: 45px; /* oval em vez de círculo */
+  width: 140px;         /* mais largo para caber o texto */
+  height: 60px;         /* altura menor para manter proporção */
+  font-size: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 8px;
+}
+
+
+/* Efeito hover igual ao dividir por itens */
+.botao:hover,
+.botao-refresh:hover,
+.adicionar-pessoa-btn:hover,
+.calcular-btn:hover {
+  background-color: #00ff00;
+  color: #1a1919;
+}

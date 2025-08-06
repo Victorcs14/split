@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPLIT</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body class="tela-divisao">
+  <h1>SPLIT</h1>
+
+  <div class="input-container">
+    <label for="valorConta">VALOR DA CONTA:</label>
+    <input type="number" id="valorConta" placeholder="Ex: 100,00" />
+  </div>
+
+  <ul id="listaPessoas" class="pessoas">
+    <li><input type="text" value="EU" /></li>
+  </ul>
+<div class="botoes-container">
+  <button id="adicionarPessoa" class="botao">+</button>
+  <button id="calcular" class="botao">CALCULAR</button>
+  <button id="refresh" class="botao-refresh">
+    <i class="fas fa-sync-alt"></i>
+  </button>
+</div>
+
+
+  <div id="resultado" class="resultado"></div>
+
+  <script src="index.js"></script>
+</body>
+</html>
