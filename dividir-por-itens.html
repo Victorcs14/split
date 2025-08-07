@@ -18,7 +18,7 @@
       font-size: 3em;
       color: #00ff00;
       margin-bottom: 30px;
-      text-shadow: 0 0 15px #00ff00;
+      
     }
     .input-container {
       background: #00cc33;
@@ -197,32 +197,51 @@
       background: #00ff00;
       color: #1a1919;
     }
-    .lixeira-icone {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #222;
-      border-radius: 50%;
-      padding: 2px 4px;
-      color: #fff;
-      border: 2px solid #00cc33;
-      font-size: 15px;
-      transition: background 0.2s, color 0.2s;
-      z-index: 3;
-      margin-top: 4px;
-    }
-    .lixeira-icone:hover {
-      background: #ff3333;
-      color: #fff;
-      border-color: #ff3333;
-    }
+   .remover-pessoa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #222;
+  border-radius: 50%;
+  padding: 4px;
+  border: 2px solid #222;
+  font-size: 16px;
+  transition: background 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.remover-pessoa i {
+  color: #00cc33;
+  transition: color 0.3s ease;
+}
+
+.remover-pessoa:hover {
+  background-color: #00cc33;
+  transform: scale(1.1);
+}
+
+.remover-pessoa:hover i {
+  color: #fff;
+}
+
+
+
+
   </style>
 </head>
 <body>
   <div class="titulo">SPLIT</div>
   <div class="input-container">
     <label for="valorConta">VALOR DA CONTA:</label>
-    <input type="number" id="valorConta" placeholder="Ex: 100,00" />
+    <!-- ✅ Campo de valor da conta + botão 10% lado a lado -->
+<div style="display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 20px;">
+  <input type="number" id="valorConta" class="campo" placeholder="Valor da Conta">
+
+  <!-- ✅ Botão 10% -->
+  <button id="botaoDezPorCento" class="botao">10%</button>
+</div>
+
   </div>
   <ul id="pessoasItens" class="pessoas-itens">
     <!-- Pessoas serão adicionadas aqui -->
@@ -230,141 +249,166 @@
   <button id="adicionarPessoa" class="adicionar-pessoa-btn"><i class="fas fa-plus"></i></button>
   <button id="calcular" class="calcular-btn">CALCULAR</button>
   <div id="resultado" class="resultado"></div>
-  <script>
-    // Adiciona pessoas
-    const pessoasItens = document.getElementById('pessoasItens');
-    document.getElementById('adicionarPessoa').onclick = function() {
-      const li = document.createElement('li');
-      li.className = 'pessoa-bloco';
-      li.innerHTML = `
-        <div class="nome-pessoa">
-          <i class="fas fa-user-circle" style="font-size:40px;color:#00cc33"></i>
-          <input type="text" placeholder="Nome" value="">
-          <span class="resultado-pessoa"></span>
-        </div>
-        <div class="itens-botoes">
-          <button class="item-btn" data-tipo="bebida" title="Adicionar bebida"><i class="fas fa-champagne-glasses"></i></button>
-          <button class="item-btn" data-tipo="comida" title="Adicionar comida"><i class="fas fa-utensils"></i></button>
-          <button class="item-btn" data-tipo="doce" title="Adicionar doce"><i class="fas fa-cake"></i></button>
-        </div>
-        <div class="itens-lista"></div>
-      `;
-      pessoasItens.appendChild(li);
+<script>
+  const pessoasItens = document.getElementById('pessoasItens');
 
-      // Adiciona eventos para os botões de item
-      li.querySelectorAll('.item-btn').forEach(btn => {
-        btn.onclick = function() {
-          const tipo = btn.getAttribute('data-tipo');
-          // Evita múltiplos inputs abertos
-          if (btn.parentElement.querySelector('.input-valor-item')) return;
+  document.getElementById('adicionarPessoa').onclick = function () {
+    const li = document.createElement('li');
+    li.className = 'pessoa-bloco';
 
-          // Cria input ao lado do botão
-          const input = document.createElement('input');
-          input.type = 'number';
-          input.min = '0.01';
-          input.step = '0.01';
-          input.placeholder = 'Valor';
-          input.className = 'input-valor-item';
+    li.innerHTML = `
+      <div class="nome-pessoa">
+        <i class="fas fa-user-circle" style="font-size:40px;color:#00cc33"></i>
+        <input type="text" placeholder="Nome" value="">
+        <span class="resultado-pessoa"></span>
+        <span class="lixeira-icone remover-pessoa" title="Remover pessoa">
+          <i class="fas fa-trash"></i>
+        </span>
+      </div>
+      <div class="itens-botoes">
+        <button class="item-btn" data-tipo="bebida" title="Adicionar bebida"><i class="fas fa-champagne-glasses"></i></button>
+        <button class="item-btn" data-tipo="comida" title="Adicionar comida"><i class="fas fa-utensils"></i></button>
+        <button class="item-btn" data-tipo="doce" title="Adicionar doce"><i class="fas fa-cake"></i></button>
+      </div>
+      <div class="itens-lista"></div>
+    `;
 
-          btn.parentElement.insertBefore(input, btn.nextSibling);
-          input.focus();
+    pessoasItens.appendChild(li);
 
-          // Ao sair do campo ou pressionar Enter, adiciona o item
-          function finalizar() {
-            const valor = parseFloat(input.value.replace(',', '.'));
-            if (!isNaN(valor) && valor > 0) {
-              adicionarItem(li.querySelector('.itens-lista'), tipo, valor);
-            }
-            input.remove();
+    // ✅ Corrigido: agora seleciona corretamente o botão de remover pessoa
+    li.querySelector('.remover-pessoa').onclick = function () {
+      li.remove();
+    };
+
+    li.querySelectorAll('.item-btn').forEach(btn => {
+      btn.onclick = function () {
+        const tipo = btn.getAttribute('data-tipo');
+        if (btn.parentElement.querySelector('.input-valor-item')) return;
+
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.min = '0.01';
+        input.step = '0.01';
+        input.placeholder = 'Valor';
+        input.className = 'input-valor-item';
+
+        btn.parentElement.insertBefore(input, btn.nextSibling);
+        input.focus();
+
+        function finalizar() {
+          const valor = parseFloat(input.value.replace(',', '.'));
+          if (!isNaN(valor) && valor > 0) {
+            adicionarItem(li.querySelector('.itens-lista'), tipo, valor);
           }
-          input.addEventListener('blur', finalizar);
-          input.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-              finalizar();
-            }
-          });
-        };
-      });
-    };
+          input.remove();
+        }
 
-    // Função para adicionar ou somar itens
-    function adicionarItem(container, tipo, valor) {
-      let icone, label;
-      if (tipo === 'bebida') {
-        icone = '<i class="fas fa-champagne-glasses icone"></i>';
-        label = 'bebida';
-      } else if (tipo === 'comida') {
-        icone = '<i class="fas fa-utensils icone"></i>';
-        label = 'comida';
-      } else {
-        icone = '<i class="fas fa-cake icone"></i>';
-        label = 'doce';
-      }
-      let itemDiv = container.querySelector(`.item-icone[data-tipo="${tipo}"]`);
-      if (!itemDiv) {
-        itemDiv = document.createElement('div');
-        itemDiv.className = 'item-icone';
-        itemDiv.setAttribute('data-tipo', tipo);
-        // Armazena os valores individuais em um array
-        itemDiv.dataset.valores = JSON.stringify([valor]);
-        itemDiv.innerHTML = `
-          <span class="icone-circulo" style="position:relative;">
-            ${icone}
-            <span class="quantidade">1</span>
-          </span>
-          <span class="lixeira-icone" style="margin-top:2px;cursor:pointer;position:static;">
-            <i class="fas fa-trash"></i>
-          </span>
-          <span class="valor-total">${valor.toFixed(2).replace('.', ',')}</span>
-        `;
-        container.appendChild(itemDiv);
-
-        // Evento de remover item
-        itemDiv.querySelector('.lixeira-icone').onclick = function(e) {
-          e.stopPropagation();
-          removerUltimoValor(itemDiv);
-        };
-      } else {
-        // Atualiza quantidade e valor
-        let valores = JSON.parse(itemDiv.dataset.valores);
-        valores.push(valor);
-        itemDiv.dataset.valores = JSON.stringify(valores);
-        let qtd = valores.length;
-        let valAtual = valores.reduce((a, b) => a + b, 0);
-        itemDiv.querySelector('.quantidade').textContent = qtd;
-        itemDiv.querySelector('.valor-total').textContent = valAtual.toFixed(2).replace('.', ',');
-      }
-    }
-
-    // Função para remover último valor do item
-    function removerUltimoValor(itemDiv) {
-      let valores = JSON.parse(itemDiv.dataset.valores);
-      if (valores.length > 1) {
-        valores.pop();
-        itemDiv.dataset.valores = JSON.stringify(valores);
-        itemDiv.querySelector('.quantidade').textContent = valores.length;
-        let valAtual = valores.reduce((a, b) => a + b, 0);
-        itemDiv.querySelector('.valor-total').textContent = valAtual.toFixed(2).replace('.', ',');
-      } else {
-        // Remove o item inteiro se não houver mais valores
-        itemDiv.remove();
-      }
-    }
-
-    // Botão calcular: mostra o total ao lado do nome de cada pessoa
-    document.getElementById('calcular').onclick = function() {
-      const pessoas = document.querySelectorAll('.pessoa-bloco');
-      pessoas.forEach(pessoa => {
-        let total = 0;
-        pessoa.querySelectorAll('.item-icone').forEach(item => {
-          const valores = JSON.parse(item.dataset.valores);
-          total += valores.reduce((a, b) => a + b, 0);
+        input.addEventListener('blur', finalizar);
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            finalizar();
+          }
         });
-        pessoa.querySelector('.resultado-pessoa').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+      };
+    });
+  };
+
+  function adicionarItem(container, tipo, valor) {
+    let icone;
+    if (tipo === 'bebida') {
+      icone = '<i class="fas fa-champagne-glasses icone"></i>';
+    } else if (tipo === 'comida') {
+      icone = '<i class="fas fa-utensils icone"></i>';
+    } else {
+      icone = '<i class="fas fa-cake icone"></i>';
+    }
+
+    let itemDiv = container.querySelector(`.item-icone[data-tipo="${tipo}"]`);
+    if (!itemDiv) {
+      itemDiv = document.createElement('div');
+      itemDiv.className = 'item-icone';
+      itemDiv.setAttribute('data-tipo', tipo);
+      itemDiv.dataset.valores = JSON.stringify([valor]);
+      itemDiv.innerHTML = `
+        <span class="icone-circulo" style="position:relative;">
+          ${icone}
+          <span class="quantidade">1</span>
+        </span>
+        <span class="lixeira-icone" style="margin-top:2px;cursor:pointer;position:static;">
+          <i class="fas fa-trash"></i>
+        </span>
+        <span class="valor-total">${valor.toFixed(2).replace('.', ',')}</span>
+      `;
+      container.appendChild(itemDiv);
+
+      itemDiv.querySelector('.lixeira-icone').onclick = function (e) {
+        e.stopPropagation();
+        removerUltimoValor(itemDiv);
+      };
+    } else {
+      let valores = JSON.parse(itemDiv.dataset.valores);
+      valores.push(valor);
+      itemDiv.dataset.valores = JSON.stringify(valores);
+      let qtd = valores.length;
+      let valAtual = valores.reduce((a, b) => a + b, 0);
+      itemDiv.querySelector('.quantidade').textContent = qtd;
+      itemDiv.querySelector('.valor-total').textContent = valAtual.toFixed(2).replace('.', ',');
+    }
+  }
+
+  function removerUltimoValor(itemDiv) {
+    let valores = JSON.parse(itemDiv.dataset.valores);
+    if (valores.length > 1) {
+      valores.pop();
+      itemDiv.dataset.valores = JSON.stringify(valores);
+      itemDiv.querySelector('.quantidade').textContent = valores.length;
+      let valAtual = valores.reduce((a, b) => a + b, 0);
+      itemDiv.querySelector('.valor-total').textContent = valAtual.toFixed(2).replace('.', ',');
+    } else {
+      itemDiv.remove();
+    }
+  }
+
+  function calcularDivisao(comGorjeta = false) {
+    const pessoas = document.querySelectorAll('.pessoa-bloco');
+    let totaisIndividuais = [];
+    let totalGeral = 0;
+
+    pessoas.forEach(pessoa => {
+      let total = 0;
+      pessoa.querySelectorAll('.item-icone').forEach(item => {
+        const valores = JSON.parse(item.dataset.valores);
+        total += valores.reduce((a, b) => a + b, 0);
       });
-      // Limpa o resultado geral embaixo
-      document.getElementById('resultado').innerHTML = '';
-    };
-  </script>
+      totaisIndividuais.push(total);
+      totalGeral += total;
+    });
+
+    let gorjetaPorPessoa = 0;
+    if (comGorjeta && pessoas.length > 0) {
+      const gorjetaTotal = totalGeral * 0.10;
+      gorjetaPorPessoa = gorjetaTotal / pessoas.length;
+    }
+
+    totaisIndividuais.forEach((total, index) => {
+      const pessoa = pessoas[index];
+      const totalFinal = total + gorjetaPorPessoa;
+      pessoa.querySelector('.resultado-pessoa').textContent = `R$ ${totalFinal.toFixed(2).replace('.', ',')}`;
+    });
+
+    const totalFinalGeral = totalGeral + (comGorjeta ? totalGeral * 0.10 : 0);
+    document.getElementById('resultado').innerHTML = `Total geral ${comGorjeta ? 'com' : 'sem'} gorjeta: R$ ${totalFinalGeral.toFixed(2).replace('.', ',')}`;
+  }
+
+  document.getElementById('calcular').onclick = function () {
+    calcularDivisao(false);
+  };
+
+  document.getElementById("botaoDezPorCento").onclick = function () {
+    calcularDivisao(true);
+  };
+</script>
+
+
 </body>
 </html>

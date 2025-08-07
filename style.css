@@ -111,3 +111,33 @@ h1 {
   background-color: #00ff00;
   color: #1a1919;
 }
+.botao-deletar {
+  background: none;
+  border: none;
+  color: #00ff00;
+  font-size: 18px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.botao-deletar:hover {
+  color: red;
+}
+
+.caixa-pessoa {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.botao-porcentagem {
+  background: linear-gradient(135deg, #fff, #00ff00);
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 40px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
